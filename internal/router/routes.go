@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/priyanshu334/tw-bend/internal/db"
 	"github.com/priyanshu334/tw-bend/internal/module/auth"
+	"github.com/priyanshu334/tw-bend/internal/module/user"
 )
 
 func Setup(app *fiber.App) {
@@ -16,9 +17,14 @@ func Setup(app *fiber.App) {
 		})
 	})
 
-	userRepo := auth.NewRepository(db.DB)
-	userService := auth.NewService(userRepo)
-	userHandler := auth.NewHanler(userService)
+	authRepo := auth.NewRepository(db.DB)
+	authService := auth.NewService(authRepo)
+	authHandler := auth.NewHanler(authService)
 
-	auth.RegisterRoutes(api, userHandler)
+	userRepo := user.NewRepository(db.DB)
+
+	userService := user.NewService(userRepo)
+	userHandler := user.NewHandler(userService)
+	auth.RegisterRoutes(api, authHandler)
+	user.RegisterRoutes(api, userHandler)
 }

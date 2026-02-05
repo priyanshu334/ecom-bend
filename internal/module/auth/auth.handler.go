@@ -90,3 +90,9 @@ func (h *Handler) Me(c fiber.Ctx) error {
 		"user_role": c.Locals("user_role"),
 	})
 }
+
+func (h *Handler) Logout(c fiber.Ctx) error {
+	c.ClearCookie("access_token")
+	c.ClearCookie("refresh_token")
+	return c.SendStatus(fiber.StatusOK)
+}
